@@ -8,7 +8,7 @@ class Incrementer extends React.Component {
     constructor(props) {
         super(props);
 
-        const {start, step} = props;
+        const {start} = props;
 
         this.state = { value: start }
 
