@@ -1,23 +1,19 @@
-class Clock extends React.Component {
+class Incrementer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            date: new Date
-        }
-        this.timer = null
+
+        const {start} = props;
+
+        this.state = { start, value: start }
+
+        this.timer = null;
     }
 
     render() {
-        const {date} = this.state
+        const {value} = this.state
         return (
-            <p>Il est {date.toLocaleDateString()} {date.toLocaleTimeString()}</p>
+            <div><span>{value}</span></div>
         )
-    }
-
-    tick() {
-        this.setState({
-            date: new Date
-        })
     }
 
     componentDidMount() {
@@ -27,6 +23,11 @@ class Clock extends React.Component {
     componentWillUnmount() {
         window.clearInterval(this.timer)
     }
+
+    tick() {
+        this.state.value++
+        this.setState(this.state)
+    }
 }
 
-ReactDOM.render(<Clock/>, document.querySelector("#app"))
+ReactDOM.render(<Incrementer start={10}/>, document.querySelector("#app"))
