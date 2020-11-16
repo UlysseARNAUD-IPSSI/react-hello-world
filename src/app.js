@@ -1,4 +1,5 @@
 class Incrementer extends React.Component {
+
     constructor(props) {
         super(props);
 
@@ -6,13 +7,16 @@ class Incrementer extends React.Component {
 
         this.state = { start, value: start }
 
-        this.timer = null;
+        this.timer = null
     }
 
     render() {
-        const {value} = this.state
+        const {start, value} = this.state
         return (
-            <div><span>{value}</span></div>
+            <div>
+                <p>Début : {start}</p>
+                <p>Valeur actuelle : {value}</p>
+            </div>
         )
     }
 
@@ -30,4 +34,4 @@ class Incrementer extends React.Component {
     }
 }
 
-ReactDOM.render(<Incrementer start={10}/>, document.querySelector("#app"))
+ReactDOM.render(<Incrementer start={10} />, document.querySelector("#app"))
