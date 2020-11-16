@@ -3,35 +3,32 @@ class ManuelIncrementer extends React.Component {
     static defaultProps = {
         start: 0,
         step: 1,
-        paused: false
+        paused: true
     }
 
     constructor(props) {
         super(props);
 
-        const {start,paused} = props;
+        const {start, paused} = props;
 
-        this.state = { value: start, paused }
-
-        this.timer = null
+        this.state = {value: start, paused}
     }
 
     render() {
         const {start} = this.props
         const {value, paused} = this.state
+
         return (
             <div>
                 <p>Début : {start}</p>
                 <p>Valeur actuelle : {value}</p>
-                <button onClick={this.pause.bind(this)}>{paused ? "Reprendre" : "Pause"}</button>
+                <button role="button" onClick={this.togglePaused.bind(this)}>{paused ? "Reprendre" : "Pause"}</button>
             </div>
         )
     }
 
     componentDidMount() {
-        this.timer = window.setInterval(() => {
-            return this.increment()
-        }, 1000)
+        this.callPauseOrPlay()
     }
 
     componentWillUnmount() {
@@ -39,20 +36,57 @@ class ManuelIncrementer extends React.Component {
     }
 
     increment() {
-        const {paused} = this.state
-
-        if (true === paused) return
-
-        this.setState((state,props) => ({
+        this.setState((state, props) => ({
             value: state.value + props.step
         }))
     }
 
-    pause(event) {
-        event.preventDefault()
-        
-        this.setState((state,props) => ({
-            paused: !state.paused
+
+    togglePaused() {
+        const {paused} = this.state
+
+        this.state.paused = !paused
+        this.forceUpdate()
+
+        this.callPauseOrPlay.bind(this)
+    }
+
+
+    componentDidUpdate() {
+        console.log(this.state)
+    }
+
+
+    callPauseOrPlay() {
+        console.log('callPauseOrPlay')
+
+        const {paused} = this.state
+
+        if (true === paused) this.pause.bind(this)
+        else this.play.bind(this)
+    }
+
+
+    pause() {
+        console.log('pause')
+
+        window.clearInterval(this.state.timer)
+
+        this.setState((state, props) => ({
+            timer: null,
+            paused: true
+        }))
+    }
+
+
+    play() {
+        console.log('play')
+
+        this.setState((state, props) => ({
+            timer: window.setInterval(() => {
+                return this.increment()
+            }, 1000),
+            paused: false
         }))
     }
 }
