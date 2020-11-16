@@ -1,22 +1,32 @@
-const render = function () {
+class Clock extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            date: new Date
+        }
+        this.timer = null
+    }
 
-    const Welcome = ({name,children}) => {
+    render() {
+        const {date} = this.state
         return (
-            <div>
-                <h1>Bonjour {name}</h1>
-                <p>{children}</p>
-            </div>
+            <p>Il est {date.toLocaleDateString()} {date.toLocaleTimeString()}</p>
         )
     }
 
-    const App = () => (
-        <div>
-            <Welcome name="John">Bonjour !</Welcome>
-            <Welcome name="Emmanuelle"></Welcome>
-        </div>
-    )
+    tick() {
+        this.setState({
+            date: new Date
+        })
+    }
 
-    ReactDOM.render(<App />, document.querySelector('#app'))
+    componentDidMount() {
+        this.timer = window.setInterval(() => this.tick(), 1000)
+    }
+
+    componentWillUnmount() {
+        window.clearInterval(this.timer)
+    }
 }
 
-render()
+ReactDOM.render(<Clock/>, document.querySelector("#app"))
