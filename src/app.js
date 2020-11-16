@@ -48,7 +48,9 @@ class ManuelIncrementer extends React.Component {
         }))
     }
 
-    pause() {
+    pause(event) {
+        event.preventDefault()
+        
         this.setState((state,props) => ({
             paused: !state.paused
         }))
