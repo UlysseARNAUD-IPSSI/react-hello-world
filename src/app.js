@@ -1,17 +1,23 @@
 class Incrementer extends React.Component {
 
+    static defaultProps = {
+        start: 0,
+        step: 1
+    }
+
     constructor(props) {
         super(props);
 
-        const {start} = props;
+        const {start, step} = props;
 
-        this.state = { start, value: start }
+        this.state = { value: start }
 
         this.timer = null
     }
 
     render() {
-        const {start, value} = this.state
+        const {start} = this.props
+        const {value} = this.state
         return (
             <div>
                 <p>Début : {start}</p>
@@ -29,9 +35,10 @@ class Incrementer extends React.Component {
     }
 
     tick() {
-        this.state.value++
-        this.setState(this.state)
+        this.setState((state,props) => ({
+            value: state.value + props.step
+        }))
     }
 }
 
-ReactDOM.render(<Incrementer start={10} />, document.querySelector("#app"))
+ReactDOM.render(<Incrementer/>, document.querySelector("#app"))
