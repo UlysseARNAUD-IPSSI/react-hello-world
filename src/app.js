@@ -1,85 +1,80 @@
-class ManuelIncrementer extends React.Component {
+class Formulaire extends React.Component {
 
-    static defaultProps = {
-        start: 0,
-        step: 1,
-        paused: false
+    state = {
+        nom: undefined,
+        prenom: undefined,
+        estAbonne: false
     }
 
-    
     constructor(props) {
-        super(props);
+        super(props)
 
-        const {start, paused} = props;
+        this.handleChangeNom = this.handleChangeNom.bind(this)
+        this.handleChangePrenom = this.handleChangePrenom.bind(this)
+        this.handleClickEstAbonne = this.handleClickEstAbonne.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
 
-        this.state = {value: start, paused, timer: null}
+    }
 
-        this.play = this.play.bind(this)
-        this.pause = this.pause.bind(this)
+
+    handleChangeNom (event) {
+        this.setState({
+            nom: event.target.value
+        })
+    }
+
+
+    handleChangePrenom (event) {
+        this.setState({
+            prenom: event.target.value
+        })
+    }
+
+
+    handleClickEstAbonne (event) {
+        this.setState({
+            estAbonne: event.target.checked
+        })
+    }
+
+
+    handleSubmit (event) {
+        event.preventDefault()
+        console.log('Formulaire soumis !', {state: this.state})
     }
 
 
     render() {
-        const {start} = this.props
-        const {value, paused} = this.state
-
         return (
-            <div>
-                <p>Début : {start}</p>
-                <p>Valeur actuelle : {value}</p>
-                <button role="button" onClick={this.togglePaused.bind(this)}>{paused ? "Reprendre" : "Pause"}</button>
-            </div>
+            <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" placeholder="Jean" onChange={this.handleChangeNom}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="prenom">Prenom</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Dupont" onChange={this.handleChangePrenom}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="estAbonne">S'inscrire à la newletter ?</label>
+                    <input type="checkbox" name="estAbonne" id="estAbonne" onClick={this.handleClickEstAbonne} />
+                </div>
+                <button type="submit">Soumettre le formulaire</button>
+            </form>
         )
     }
 
 
-    componentDidMount() {
-        const {paused} = this.state
-
-        if (true === paused) return this.pause()
-        else return this.play()
-    }
+    componentDidMount() {}
 
 
-    componentWillUnmount() {
-        this.pause()
-    }
+    componentWillUnmount() {}
 
 
     componentDidUpdate() {}
 
 
-    increment() {
-        this.setState((state, props) => ({
-            value: state.value + props.step
-        }))
-    }
-
-
-    togglePaused() {
-        const {paused} = this.state
-
-        if (false === paused) return this.pause()
-        else return this.play()
-    }
-
-
-    pause() {
-        window.clearInterval(this.state.timer)
-
-        this.setState((state, props) => ({
-            paused: true,
-            timer: null
-        }))
-    }
-
-
-    play() {
-        this.setState((state, props) => ({
-            paused: false,
-            timer: window.setInterval(() => { this.increment() }, 1000)
-        }))
-    }
 }
 
-ReactDOM.render(<ManuelIncrementer/>, document.querySelector("#app"))
+
+ReactDOM.render(<Formulaire/>, document.querySelector("#app"))
